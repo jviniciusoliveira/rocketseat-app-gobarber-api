@@ -19,7 +19,7 @@ class ScheduleController {
 
     let { date = new Date() } = request.query;
 
-    if (date && !(typeof date === 'object')) {
+    if (!(date instanceof Date)) {
       date = parseISO(date);
     }
 
