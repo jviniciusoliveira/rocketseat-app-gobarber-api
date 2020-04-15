@@ -132,6 +132,12 @@ class AppointmentController {
       });
     }
 
+    if (appointment.canceled_at !== null) {
+      return response.status(401).json({
+        error: 'This appointment is already canceled.',
+      });
+    }
+
     const dateWithSub = subHours(appointment.date, 2);
 
     if (isBefore(dateWithSub, new Date())) {
