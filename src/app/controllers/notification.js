@@ -27,6 +27,12 @@ class NotificationController {
 
     const notification = await Notification.findById(id);
 
+    if (!notification) {
+      return response.status(401).json({
+        error: 'Notification not found.',
+      });
+    }
+
     if (request.userId !== notification.user) {
       return response.status(401).json({
         error: "You don't have permission to update this notification.",
