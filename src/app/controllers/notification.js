@@ -23,11 +23,18 @@ class NotificationController {
   }
 
   async update(request, response) {
-    const notification = await Notification.findByIdAndUpdate(
-      request.params.id,
-      { read: true },
-      { new: true }
-    );
+    const { id } = request.params;
+
+    const notification = await Notification.findById(id);
+
+    if (request.userId !== notification.user) {
+      return response.status(401).json({
+        error: "You don't have permission to update this notification.",
+      });
+    }
+
+    notification.read = true;
+    notification.save();
 
     return response.json(notification);
   }
