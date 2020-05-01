@@ -4,6 +4,7 @@ import Appointment from '../models/appointment';
 import User from '../models/user';
 
 import Queue from '../../lib/queue';
+import Cache from '../../lib/cache';
 
 class CancelAppointmentService {
   async run({ appointment_id, user_id }) {
@@ -42,6 +43,8 @@ class CancelAppointmentService {
     await Queue.add('cancellation-mail', {
       appointment,
     });
+
+    Cache.invalidatePrefix(`user:${user_id}:appointments`);
 
     return appointment;
   }
