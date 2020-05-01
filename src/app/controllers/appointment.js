@@ -1,12 +1,12 @@
-import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
-import pt from 'date-fns/locale/pt';
+import { isBefore, subHours } from 'date-fns';
 
 import Appointment from '../models/appointment';
 import User from '../models/user';
 import File from '../models/file';
-import Notification from '../schemas/notification';
 
 import Queue from '../../lib/queue';
+
+import CreateAppointmentService from '../services/create-appointment';
 
 class AppointmentController {
   async index(request, response) {
@@ -43,58 +43,10 @@ class AppointmentController {
   async store(request, response) {
     const { provider_id, date } = request.body;
 
-    const checkIsProvider = await User.findOne({
-      where: { id: provider_id, provider: true },
-    });
-
-    if (!checkIsProvider) {
-      return response
-        .status(401)
-        .json({ error: 'You can only create appointments with providers.' });
-    }
-
-    if (provider_id === request.userId) {
-      return response
-        .status(401)
-        .json({ error: 'You cannot schedule with yourself.' });
-    }
-
-    const hourStart = startOfHour(parseISO(date));
-
-    if (isBefore(hourStart, new Date())) {
-      return response
-        .status(400)
-        .json({ error: 'Past dates are not permitted.' });
-    }
-
-    const checkAvailability = await Appointment.findOne({
-      where: {
-        provider_id,
-        canceled_at: null,
-        date: hourStart,
-      },
-    });
-
-    if (checkAvailability) {
-      return response
-        .status(400)
-        .json({ error: 'Appointment date is not available.' });
-    }
-
-    const appointment = await Appointment.create({
-      user_id: request.userId,
+    const appointment = await CreateAppointmentService.run({
       provider_id,
-      date: hourStart,
-    });
-
-    const user = await User.findByPk(request.userId);
-    const dateFomatted = format(hourStart, "dd 'de' MMMM', às' H:mm'h'", {
-      locale: pt,
-    });
-
-    await Notification.create({
-      content: `Novo agendamento de ${user.name} para o dia ${dateFomatted}.`,
-      user: provider_id,
+      user_id: request.userId,
+      date,
     });
 
     return response.json(appointment);
