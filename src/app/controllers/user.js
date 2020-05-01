@@ -1,6 +1,8 @@
 import User from '../models/user';
 import File from '../models/file';
 
+import Cache from '../../lib/cache';
+
 class UserController {
   async store(request, response) {
     const { name, email, password, provider = false } = request.body;
@@ -17,6 +19,10 @@ class UserController {
       password,
       provider,
     });
+
+    if (provider) {
+      Cache.invalidate('providers');
+    }
 
     return response.json(user.id);
   }
