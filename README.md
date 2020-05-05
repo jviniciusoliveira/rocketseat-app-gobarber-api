@@ -3,7 +3,7 @@
 </h1>
 
 <p align="center">
-  <img src="https://github.com/jviniciusoliveira/rocketseat-app-gobarber-web/blob/master/.github/logo.PNG" />
+  <img src="https://github.com/jviniciusoliveira/rocketseat-app-gobarber-api/blob/master/.github/logo.PNG" />
 </p>
 
 ## **Sobre**
