@@ -47,3 +47,7 @@ _O aplicativo GoBarber possibilita o agendamento de horários por clientes de ba
 - Executar migrations: `yarn sequelize db:migrate`
 - Iniciar a aplicação: `yarn dev`
 - Iniciar serviço de fila: `yarn queue` (Executar em outra aba do Terminal)
+
+## **Testando a API**
+
+- Teste a API usando aplicativos como o Insomia / Postman ou usando a aplicação _GoBarber Web_ disponível no respositório [aqui](https://github.com/jviniciusoliveira/rocketseat-app-gobarber-web).
