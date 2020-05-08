@@ -2,6 +2,9 @@ import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import redis from 'redis';
+import RateLimit from 'express-rate-limit';
+import RateLimitRedis from 'rate-limit-redis';
 import { resolve } from 'path';
 import * as Sentry from '@sentry/node';
 import Youch from 'youch';
@@ -31,6 +34,8 @@ class App {
       '/files',
       express.static(resolve(__dirname, '..', 'tmp', 'uploads'))
     );
+
+    this.server.use(this.limitRate());
   }
 
   routes() {
@@ -48,6 +53,19 @@ class App {
       }
 
       return res.status(500).json({ error: 'Internal server error.' });
+    });
+  }
+
+  limitRate() {
+    return new RateLimit({
+      store: new RateLimitRedis({
+        client: redis.createClient({
+          host: process.env.REDIS_HOST,
+          port: process.env.REDIS_PORT,
+        }),
+      }),
+      windowMs: 1000 * 60 * 15, // 15 minutes
+      max: 10,
     });
   }
 }
