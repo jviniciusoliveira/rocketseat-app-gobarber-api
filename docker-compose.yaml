@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  api-gobarber:
+    container_name: api-gobarber
+    build: '.'
+    volumes:
+      - ./:/home/node/api
+      - /home/node/api/node_modules
+    depends_on:
+      - postgres
+      - mongodb
+      - redis2
+    networks:
+      - api-connect
+    ports:
+      - '${APP_PORT}:3002'
+
+  mongodb:
+    container_name: mongodb
+    image: 'mongo'
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - '27017:27017'
+    networks:
+      - api-connect
+
+  postgres:
+    container_name: postgres
+    image: postgres:11
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+    ports:
+      - '5432:5432'
+    networks:
+      - api-connect
+
+  redis:
+    container_name: redis
+    image: redis:alpine
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+    networks:
+      - api-connect
+
+volumes:
+  postgres-data:
+  mongo-data:
+  redis-data:
+
+networks:
+  api-connect:
+    driver: bridge
