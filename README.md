@@ -25,25 +25,44 @@ _O aplicativo GoBarber possibilita o agendamento de horários por clientes de ba
 - Listagem de Agendamentos
 - Listagem de horários disponíveis
 - Envio de e-mail de cancelamento
-- Serviço de Fila com Redis e a lib Queue
+- Serviço de Fila
 - Monitoramento de falhas com Sentry
 - Serviço de Cache
 
-## **Pré-requisitos**
+## **Instalação**
 
-- Banco de dados Postgres
-- Banco de dados MongoDB
+### **Docker**
+
+#### **Pré-requisitos**
+
+- Docker
+
+#### **Comandos**
+
+- Clonar o repositório: `git clone https://github.com/jviniciusoliveira/rocketseat-app-gobarber-api.git`
+- Acessar o diretório: `cd rocketseat-app-gobarber-api'`
+- Renomear o arquivo `.env.exemplo` para `.env` e preencher as variáveis de ambiente
+- Rodar Docker Compose: `docker-compose up`
+
+### **Local**
+
+#### **Pré-requisitos**
+
+- Node
+- Yarn
+- Postgres
+- MongoDB
 - Redis
 
-## **Instalação**
+#### **Comandos**
 
 - Clonar o repositório: `git clone https://github.com/jviniciusoliveira/rocketseat-app-gobarber-api.git`
 - Acessar o diretório: `cd rocketseat-app-gobarber-api'`
 - Instalar as dependências: `yarn`
-- Iniciar o banco de dados Postgres (via Docker, localmente ou serviço de preferência)
-- Iniciar o banco de dados MongoDB (via Docker, localmente ou serviço de preferência)
+- Iniciar o banco de dados Postgres
+- Iniciar o banco de dados MongoDB
 - Iniciar o Redis: `docker run --name redis -p 6379:6379 -d -t redis:alpine`
-- Renomear o arquivo `.env.exemplo` para `.env` e preencher os parâmetros
+- Renomear o arquivo `.env.exemplo` para `.env` e preencher as variáveis de ambiente
 - Executar migrations: `yarn sequelize db:migrate`
 - Iniciar a aplicação: `yarn dev`
 - Iniciar serviço de fila: `yarn queue` (Executar em outra aba do Terminal)
