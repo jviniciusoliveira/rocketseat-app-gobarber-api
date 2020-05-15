@@ -10,7 +10,7 @@ services:
     depends_on:
       - postgres
       - mongodb
-      - redis2
+      - redis
     networks:
       - api-connect
     ports:
